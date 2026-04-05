@@ -1,0 +1,9 @@
+{
+  "name": "vozpinamar",
+  "version": "1.0.0",
+  "description": "Plataforma de participación ciudadana - Partido de Pinamar",
+  "type": "module",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}

@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f0f4f8;--card:#fff;--text:#1a2332;--muted:#5a6a7e;--border:#dde3eb;--accent:#1a5c8a;--accent2:#e8963a;--pine:#2d6a4f;--sand:#d4a85a;--lb:#e8f2f9;--ls:#fdf6ec}
+:root{--bg:#f0f4f8;--card:#fff;--text:#1a2332;--muted:#5a6a7e;--border:#dde3eb;--accent:#1a5c8a;--accent2:#e8963a;--pine:#2d6a4f;--sand:#d4a85a;--lb:#e8f2f9}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .nav{background:var(--accent);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .nav-brand{color:#fff;font-family:'Playfair Display',serif;font-size:19px;display:flex;align-items:center;gap:10px}
@@ -32,9 +32,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .hstat{text-align:center}.hstat .n{font-family:'Playfair Display',serif;font-size:30px;color:#a8d8f0}.hstat .l{font-size:10px;opacity:.65;text-transform:uppercase;letter-spacing:.7px}
 .hdiv{width:1px;height:38px;background:rgba(255,255,255,.2);align-self:center}
 
-/* DEMO BANNER */
-.demo-banner{background:#fffbeb;border:1px solid #f0c060;border-radius:10px;padding:11px 18px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:13px;color:#92400e}
-
 /* FORM */
 .form-card{background:var(--card);border-radius:16px;border:1px solid var(--border);padding:30px;margin-bottom:18px}
 .section-title{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:3px}
@@ -56,10 +53,18 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .prio-btn.baja.sel{background:#eff6ff;border-color:#3b82f6;color:#1e4063}
 .submit-btn{background:var(--accent);color:#fff;border:none;padding:13px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:5px;transition:.15s}
 .submit-btn:hover{background:#0d3d6b;transform:translateY(-1px)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .success-banner{display:none;background:#e8f2f9;border:1px solid #7ec8e3;border-radius:10px;padding:16px 20px;margin-top:12px;text-align:center}
 .success-banner.show{display:block}
 .success-banner h3{color:var(--accent);font-size:15px;margin-bottom:4px}
-.success-banner p{color:var(--muted);font-size:13px}
+.error-banner{display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:12px 16px;margin-top:10px;font-size:13px;color:#991b1b}
+.error-banner.show{display:block}
+
+/* LOADING */
+.loading-overlay{display:none;text-align:center;padding:40px;color:var(--muted);font-size:14px}
+.loading-overlay.show{display:block}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
@@ -109,7 +114,6 @@ tr:hover td{background:#f8fafc}
 .generate-btn{background:linear-gradient(135deg,var(--accent),#0d3d6b);color:#fff;border:none;padding:12px 24px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.2s}
 .generate-btn:hover{opacity:.9;transform:translateY(-1px)}
 .generate-btn.loading svg{animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 .proposal-out{display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px}
 .proposal-out.show{display:block}
 .action-item{display:flex;gap:10px;padding:9px 12px;background:var(--lb);border-radius:7px;margin-bottom:6px;border-left:3px solid var(--accent)}
@@ -119,13 +123,10 @@ tr:hover td{background:#f8fafc}
 .typing-dots span:nth-child(2){animation-delay:.2s}.typing-dots span:nth-child(3){animation-delay:.4s}
 @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-5px);opacity:1}}
 
-/* TOOLTIP */
 .zone-tooltip{position:fixed;background:rgba(13,31,55,.93);color:#fff;border-radius:9px;padding:10px 14px;font-size:11.5px;pointer-events:none;z-index:999;display:none;min-width:185px}
 .zone-tooltip h4{font-size:12.5px;margin-bottom:6px;font-weight:600;color:#a8d8f0}
 .zone-tooltip .ti{display:flex;justify-content:space-between;margin-bottom:3px;gap:12px}
 .zone-tooltip .ti span:last-child{font-weight:700;color:#7ec8e3}
-
-/* FOOTER */
 footer{text-align:center;padding:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:40px}
 footer a{color:var(--accent);text-decoration:none}
 </style>
@@ -166,11 +167,6 @@ footer a{color:var(--accent);text-decoration:none}
     </div>
   </div>
 
-  <div class="demo-banner">
-    <span style="font-size:18px">🚧</span>
-    <div><strong>Versión demo:</strong> Los reclamos se guardan en esta sesión. Para guardar datos de forma permanente, conectar con Supabase.</div>
-  </div>
-
   <div class="form-card">
     <div class="section-title">Registrá tu aporte ciudadano</div>
     <div class="section-sub">Completá tus datos y describí la necesidad o mejora que proponés para tu localidad</div>
@@ -183,25 +179,18 @@ footer a{color:var(--accent);text-decoration:none}
         <label>Localidad *</label>
         <select id="f-barrio">
           <option value="">Seleccioná la localidad</option>
-          <optgroup label="Localidades">
-            <option>Pinamar</option><option>Ostende</option><option>Valeria del Mar</option><option>Cariló</option>
-          </optgroup>
-          <optgroup label="Barrios de Pinamar">
-            <option>Centro Pinamar</option><option>Las Gaviotas</option><option>Zona Comercial</option>
-            <option>Barrio Náutico</option><option>Del Bosque</option>
-          </optgroup>
-          <optgroup label="Zonas costeras">
-            <option>Costa norte</option><option>Costa sur</option>
-          </optgroup>
+          <optgroup label="Localidades"><option>Pinamar</option><option>Ostende</option><option>Valeria del Mar</option><option>Cariló</option></optgroup>
+          <optgroup label="Barrios de Pinamar"><option>Centro Pinamar</option><option>Las Gaviotas</option><option>Zona Comercial</option><option>Barrio Náutico</option><option>Del Bosque</option></optgroup>
+          <optgroup label="Zonas costeras"><option>Costa norte</option><option>Costa sur</option></optgroup>
         </select>
       </div>
       <div class="fg"><label>Dirección / referencia</label><input type="text" id="f-dir" placeholder="Calle o punto de referencia"></div>
       <div class="fg full">
         <label>¿Sos residente o turista?</label>
         <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="prio-btn" id="btn-res" onclick="setResidencia('residente',this)" style="flex:1;color:var(--accent)">🏠 Residente</button>
-          <button class="prio-btn" id="btn-ver" onclick="setResidencia('veranean',this)" style="flex:1;color:var(--pine)">🌊 Veraneante</button>
-          <button class="prio-btn" id="btn-tur" onclick="setResidencia('turista',this)" style="flex:1;color:var(--sand)">🧳 Turista</button>
+          <button class="prio-btn" id="btn-res" onclick="setRes('residente',this)" style="flex:1;color:var(--accent)">🏠 Residente</button>
+          <button class="prio-btn" id="btn-ver" onclick="setRes('veranean',this)" style="flex:1;color:var(--pine)">🌊 Veraneante</button>
+          <button class="prio-btn" id="btn-tur" onclick="setRes('turista',this)" style="flex:1;color:var(--sand)">🧳 Turista</button>
         </div>
       </div>
       <div class="fg full">
@@ -234,38 +223,38 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
       <div class="fg full">
         <label>Descripción del reclamo o propuesta *</label>
-        <textarea id="f-desc" placeholder="Describí con detalle el problema o la mejora que proponés para tu barrio..."></textarea>
+        <textarea id="f-desc" placeholder="Describí con detalle el problema o la mejora que proponés..."></textarea>
       </div>
       <div class="fg full">
-        <button class="submit-btn" onclick="submitForm()">Enviar mi aporte a Pinamar →</button>
+        <button class="submit-btn" id="submit-btn" onclick="submitForm()">Enviar mi aporte a Pinamar →</button>
       </div>
     </div>
     <div class="success-banner" id="success-banner">
       <h3>✅ ¡Gracias por tu aporte!</h3>
-      <p>Tu reclamo fue registrado. Explorá el Mapa y las Estadísticas para verlo reflejado.</p>
+      <p>Tu reclamo fue guardado. Explorá el Mapa y las Estadísticas para verlo reflejado.</p>
     </div>
+    <div class="error-banner" id="error-banner">Error al guardar el reclamo. Intentá de nuevo.</div>
   </div>
 </div>
 
 <!-- STATS -->
 <div id="page-stats" class="page">
-  <div class="stats-grid">
-    <div class="sc"><div class="num" id="s-total">0</div><div class="lbl">Total aportes</div></div>
-    <div class="sc"><div class="num" id="s-alta">0</div><div class="lbl">Alta urgencia</div></div>
-    <div class="sc"><div class="num" id="s-loc">0</div><div class="lbl">Localidades</div></div>
-    <div class="sc"><div class="num" id="s-ideas">0</div><div class="lbl">Ideas ciudadanas</div></div>
-  </div>
-  <div class="cr">
-    <div class="cc"><h3>Problemáticas más frecuentes</h3><div id="bar-chart"></div></div>
-    <div class="cc">
-      <h3>Distribución por urgencia</h3>
-      <div class="pie-wrap"><canvas id="pie-canvas" width="160" height="160"></canvas></div>
-      <div class="pie-legend" id="pie-legend"></div>
+  <div class="loading-overlay show" id="stats-loading"><div class="spinner"></div>Cargando estadísticas...</div>
+  <div id="stats-content" style="display:none">
+    <div class="stats-grid">
+      <div class="sc"><div class="num" id="s-total">0</div><div class="lbl">Total aportes</div></div>
+      <div class="sc"><div class="num" id="s-alta">0</div><div class="lbl">Alta urgencia</div></div>
+      <div class="sc"><div class="num" id="s-loc">0</div><div class="lbl">Localidades</div></div>
+      <div class="sc"><div class="num" id="s-ideas">0</div><div class="lbl">Ideas ciudadanas</div></div>
     </div>
-  </div>
-  <div class="cr" style="grid-template-columns:1fr 1fr">
-    <div class="cc"><h3>Aportes por localidad</h3><div id="localidad-chart"></div></div>
-    <div class="cc"><h3>Residentes vs turistas</h3><canvas id="doughnut-canvas" height="170"></canvas><div id="doughnut-legend" style="margin-top:10px"></div></div>
+    <div class="cr">
+      <div class="cc"><h3>Problemáticas más frecuentes</h3><div id="bar-chart"></div></div>
+      <div class="cc"><h3>Distribución por urgencia</h3><div class="pie-wrap"><canvas id="pie-canvas" width="160" height="160"></canvas></div><div class="pie-legend" id="pie-legend"></div></div>
+    </div>
+    <div class="cr" style="grid-template-columns:1fr 1fr">
+      <div class="cc"><h3>Aportes por localidad</h3><div id="localidad-chart"></div></div>
+      <div class="cc"><h3>Residentes vs turistas</h3><canvas id="doughnut-canvas" height="170"></canvas><div id="doughnut-legend" style="margin-top:10px"></div></div>
+    </div>
   </div>
 </div>
 
@@ -295,22 +284,17 @@ footer a{color:var(--accent);text-decoration:none}
     <input type="text" class="db-search" id="db-search" placeholder="Buscar nombre, localidad, categoría..." oninput="renderDB()">
     <select onchange="renderDB()" id="db-filter-cat" style="padding:8px 11px;font-size:12.5px;border:1px solid var(--border);border-radius:7px;background:#fff">
       <option value="">Todas las categorías</option>
-      <option>Calles y veredas</option><option>Playas y balnearios</option><option>Seguridad</option>
-      <option>Salud</option><option>Médanos y ambiente</option><option>Transporte y accesos</option>
-      <option>Iluminación pública</option><option>Residuos y limpieza</option><option>Turismo y comercio</option>
-      <option>Espacios verdes</option><option>Agua y cloacas</option><option>Ruidos y habilitaciones</option>
-      <option>Educación</option><option>Deporte y recreación</option><option>Idea para la ciudad</option>
+      <option>Calles y veredas</option><option>Playas y balnearios</option><option>Seguridad</option><option>Salud</option><option>Médanos y ambiente</option><option>Transporte y accesos</option><option>Iluminación pública</option><option>Residuos y limpieza</option><option>Turismo y comercio</option><option>Espacios verdes</option><option>Agua y cloacas</option><option>Ruidos y habilitaciones</option><option>Educación</option><option>Deporte y recreación</option><option>Idea para la ciudad</option>
     </select>
     <select onchange="renderDB()" id="db-filter-prio" style="padding:8px 11px;font-size:12.5px;border:1px solid var(--border);border-radius:7px;background:#fff">
       <option value="">Todas las urgencias</option><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option>
     </select>
     <button class="export-btn" onclick="exportCSV()">↓ Exportar CSV</button>
   </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Ciudadano</th><th>Localidad</th><th>Perfil</th><th>Categoría</th><th>Urgencia</th><th>Descripción</th><th>Fecha</th></tr></thead>
-      <tbody id="db-tbody"></tbody>
-    </table>
+  <div class="loading-overlay show" id="db-loading"><div class="spinner"></div>Cargando datos...</div>
+  <div class="table-wrap" id="db-table" style="display:none">
+    <table><thead><tr><th>Ciudadano</th><th>Localidad</th><th>Perfil</th><th>Categoría</th><th>Urgencia</th><th>Descripción</th><th>Fecha</th></tr></thead>
+    <tbody id="db-tbody"></tbody></table>
   </div>
 </div>
 
@@ -318,17 +302,11 @@ footer a{color:var(--accent);text-decoration:none}
 <div id="page-ai" class="page">
   <div class="ai-card">
     <div class="section-title">Propuestas Políticas con IA</div>
-    <div class="section-sub">Analizá los reclamos ciudadanos y generá propuestas de gestión municipal para Pinamar basadas en datos reales.</div>
+    <div class="section-sub">Analizá los reclamos ciudadanos y generá propuestas de gestión municipal para Pinamar.</div>
     <div class="ai-params">
-      <div class="fg"><label>Localidad / zona</label>
-        <select id="ai-zona"><option value="">Todo el partido</option><option>Pinamar</option><option>Ostende</option><option>Valeria del Mar</option><option>Cariló</option></select>
-      </div>
-      <div class="fg"><label>Perfil</label>
-        <select id="ai-perfil"><option>Todos</option><option>Solo residentes</option><option>Solo turistas y veraneantes</option></select>
-      </div>
-      <div class="fg"><label>Tipo de propuesta</label>
-        <select id="ai-tipo"><option>Plan integral de gestión</option><option>Acciones urgentes (30 días)</option><option>Plan turístico-ambiental</option><option>Presupuesto participativo</option></select>
-      </div>
+      <div class="fg"><label>Localidad / zona</label><select id="ai-zona"><option value="">Todo el partido</option><option>Pinamar</option><option>Ostende</option><option>Valeria del Mar</option><option>Cariló</option></select></div>
+      <div class="fg"><label>Perfil</label><select id="ai-perfil"><option>Todos</option><option>Solo residentes</option><option>Solo turistas y veraneantes</option></select></div>
+      <div class="fg"><label>Tipo de propuesta</label><select id="ai-tipo"><option>Plan integral de gestión</option><option>Acciones urgentes (30 días)</option><option>Plan turístico-ambiental</option><option>Presupuesto participativo</option></select></div>
     </div>
     <button class="generate-btn" id="gen-btn" onclick="generateProposal()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
@@ -338,119 +316,122 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
-<footer>
-  VozPinamar — Plataforma de participación ciudadana del Partido de Pinamar &nbsp;|&nbsp;
-  <a href="https://www.pinamar.gob.ar" target="_blank">pinamar.gob.ar</a>
-</footer>
-
+<footer>VozPinamar — Plataforma de participación ciudadana del Partido de Pinamar &nbsp;|&nbsp; <a href="https://www.pinamar.gob.ar" target="_blank">pinamar.gob.ar</a></footer>
 <div class="zone-tooltip" id="zone-tooltip"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// ── STATE ──────────────────────────────────────
+// ── ESTADO ──
 let submissions = [];
-let selectedCat='', selectedPrio='', selectedResidencia='';
+let selectedCat='', selectedPrio='', selectedRes='';
 let mapFilter='all', doughnutChart=null;
 
-const NOMBRES=['Lucas','Martina','Gonzalo','Valeria','Diego','Florencia','Hernán','Camila','Sebastián','Laura','Andrés','Natalia','Federico','Romina','Nicolás','Agustina','Pablo','Cecilia','Ramiro','Silvina','Tomás','Daniela','Ignacio','Verónica','Matías','Claudia','Roberto','Analía','Gustavo','Paola'];
-const APELLIDOS=['García','Rodríguez','Martínez','López','González','Sánchez','Pérez','Fernández','Romero','Díaz','Torres','Álvarez','Ruiz','Ramírez','Flores','Morales','Castro','Ortega','Vega','Silva','Ríos','Cruz','Mendoza','Suárez','Herrera','Medina','Aguilar','Prieto','Blanco','Peralta'];
+const API = '/api/reclamos';
 
-const ZONAS_W=['Centro Pinamar','Centro Pinamar','Centro Pinamar','Zona Comercial','Zona Comercial','Barrio Náutico','Las Gaviotas','Las Gaviotas','Ostende','Ostende','Ostende','Valeria del Mar','Valeria del Mar','Cariló','Cariló','Costa norte','Costa sur','Pinamar'];
 const CATS_W=[
-  {cat:'Calles y veredas',w:14,icon:'🛣️',color:'#c0392b'},
-  {cat:'Residuos y limpieza',w:11,icon:'🗑️',color:'#7f8c8d'},
-  {cat:'Playas y balnearios',w:10,icon:'🏖️',color:'#2980b9'},
-  {cat:'Seguridad',w:9,icon:'🔒',color:'#8e44ad'},
-  {cat:'Iluminación pública',w:8,icon:'💡',color:'#e67e22'},
-  {cat:'Agua y cloacas',w:8,icon:'💧',color:'#2471a3'},
-  {cat:'Médanos y ambiente',w:7,icon:'🌿',color:'#27ae60'},
-  {cat:'Turismo y comercio',w:6,icon:'🏪',color:'#16a085'},
-  {cat:'Transporte y accesos',w:5,icon:'🚌',color:'#f39c12'},
-  {cat:'Ruidos y habilitaciones',w:5,icon:'🔊',color:'#6c3483'},
-  {cat:'Salud',w:5,icon:'❤️',color:'#e74c3c'},
-  {cat:'Espacios verdes',w:4,icon:'🌲',color:'#2d6a4f'},
-  {cat:'Deporte y recreación',w:3,icon:'⚽',color:'#117a65'},
-  {cat:'Educación',w:2,icon:'📚',color:'#1a5276'},
-  {cat:'Idea para la ciudad',w:2,icon:'✨',color:'#d35400'},
+  {cat:'Calles y veredas',icon:'🛣️',color:'#c0392b'},
+  {cat:'Residuos y limpieza',icon:'🗑️',color:'#7f8c8d'},
+  {cat:'Playas y balnearios',icon:'🏖️',color:'#2980b9'},
+  {cat:'Seguridad',icon:'🔒',color:'#8e44ad'},
+  {cat:'Iluminación pública',icon:'💡',color:'#e67e22'},
+  {cat:'Agua y cloacas',icon:'💧',color:'#2471a3'},
+  {cat:'Médanos y ambiente',icon:'🌿',color:'#27ae60'},
+  {cat:'Turismo y comercio',icon:'🏪',color:'#16a085'},
+  {cat:'Transporte y accesos',icon:'🚌',color:'#f39c12'},
+  {cat:'Ruidos y habilitaciones',icon:'🔊',color:'#6c3483'},
+  {cat:'Salud',icon:'❤️',color:'#e74c3c'},
+  {cat:'Espacios verdes',icon:'🌲',color:'#2d6a4f'},
+  {cat:'Deporte y recreación',icon:'⚽',color:'#117a65'},
+  {cat:'Educación',icon:'📚',color:'#1a5276'},
+  {cat:'Idea para la ciudad',icon:'✨',color:'#d35400'},
 ];
-const PRIO_W=[{p:'alta',w:40},{p:'media',w:38},{p:'baja',w:22}];
-const RESID_W=[{r:'residente',w:35},{r:'veranean',w:40},{r:'turista',w:25}];
-const DESCS={
-  'Calles y veredas':['Baches profundos en Av. del Mar. Peligroso para ciclistas y autos con el tránsito de temporada.','Vereda completamente rota en diagonal al acceso de la playa. Tropiezos constantes de turistas.','La Av. Bunge presenta hundimientos en el carril derecho desde la rotonda hasta el supermercado.','Cordones de vereda desprendidos en zona peatonal de la costanera. Riesgo de caída de noche.'],
-  'Residuos y limpieza':['Contenedores desbordados todos los domingos en temporada. La recolección no alcanza.','Basura abandonada en el acceso a la playa. Los turistas dejan bolsas entre las dunas.','Falta de cestos de residuos en la zona de restaurantes de la costanera.','Botellas y residuos plásticos en la línea de costa los lunes después del fin de semana.'],
-  'Playas y balnearios':['Acceso a la playa en sector 3 destruido: maderas rotas y clavos expuestos.','El baño público del balneario norte lleva 5 días sin agua. En plena temporada alta.','Falta de guardia de playa en el sector sur los días de semana.','Las duchas de playa del sector 2 no funcionan desde el inicio de la temporada.'],
-  'Seguridad':['Robos frecuentes en la zona de estacionamiento del supermercado.','Falta iluminación y cámaras en el pasaje entre Av. Shaw y el parque.','Motocicletas circulando a alta velocidad por el paseo peatonal costera.','Solicitud de más patrullajes nocturnos en el sector comercial.'],
-  'Iluminación pública':['Cuatro postes de luz apagados en la calle principal de Ostende desde hace 10 días.','El parque central no tiene iluminación funcional. De noche es completamente oscuro.','Luminarias parpadeantes en todo el sector del canal náutico.','Calle Gaviota sin alumbrado en 3 cuadras. Los vecinos usamos linternas para entrar a casa.'],
-  'Agua y cloacas':['Pérdida de agua en la esquina de los Aromos hace 3 semanas. ABSA no responde.','Presión de agua muy baja en todo el sector norte desde las 12 al 16hs.','Olor a cloaca en el canal náutico. Posible volcado de efluentes.','Pozo ciego de un complejo desbordando hacia la calle. Riesgo sanitario grave.'],
-  'Médanos y ambiente':['Médano en avance sobre la calle principal de acceso a Cariló. Ya ocupa un carril.','Erosión grave en la línea de costa del sector norte. Los pinos tienen raíces al descubierto.','Tala de pinos en un lote privado sin autorización municipal visible.','Autos 4x4 circulando sobre médanos protegidos. Destrucción del sistema de dunas.'],
-  'Turismo y comercio':['Propuesta: crear un mapa turístico municipal digital con QR en la costanera.','No hay cajeros automáticos funcionales en Ostende. Los turistas no pueden retirar efectivo.','Falta señalización turística en el acceso desde la Ruta 11.','Propuesta: festival gastronómico anual en Ostende para extender la temporada.'],
-  'Transporte y accesos':['El remís no tiene tarifa oficial publicada. Los turistas son cobrados precios diferentes.','Propuesta: línea de colectivo gratuito entre las 4 localidades en temporada.','No hay bicicleteros ni carriles bici en el centro de Pinamar.'],
-  'Ruidos y habilitaciones':['Complejo de eventos en Cariló con música hasta las 6 AM.','Bar sin habilitación para música en vivo en zona residencial de Ostende.','Propuesta: crear ordenanza de silencio estacional con horarios claros y sanciones.'],
-  'Salud':['El CAPS de Las Gaviotas no tiene guardia los fines de semana.','Falta un médico de planta en la salita de Ostende.','No hay desfibrilador en ninguno de los accesos a la playa.'],
-  'Espacios verdes':['El parque de la Av. Atlántico necesita poda urgente.','Juegos del parque norte rotos y oxidados. Hay tornillos expuestos.','Falta riego en las plazas de Ostende. El césped está seco.'],
-  'Deporte y recreación':['La cancha de fútbol del polideportivo necesita nuevo césped sintético.','Propuesta: crear una pista de skate en el parque costero.'],
-  'Educación':['La escuela primaria tiene problemas de humedad en el techo.','No hay jardín de infantes en Ostende. Los niños deben trasladarse a Pinamar.'],
-  'Idea para la ciudad':['Propuesta: app municipal para reportar problemas con foto y seguimiento en tiempo real.','Propuesta: programa de turismo accesible con sillas anfibias gratuitas para personas con discapacidad.','Propuesta: mercado de productores locales los fines de semana en la plaza central.'],
-};
 
-function pickW(arr){const tot=arr.reduce((s,x)=>s+(x.w||x.weight||1),0);let r=Math.random()*tot;for(const x of arr){r-=(x.w||x.weight||1);if(r<=0)return x;}return arr[arr.length-1];}
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-function rdate(days){const d=new Date();d.setDate(d.getDate()-Math.floor(Math.random()*days));return d.toISOString().split('T')[0];}
-
-function generateSeeds(n){
-  const out=[];
-  for(let i=0;i<n;i++){
-    const nombre=pick(NOMBRES),apellido=pick(APELLIDOS);
-    const barrio=pick(ZONAS_W);
-    const catEntry=pickW(CATS_W);
-    const cat=catEntry.cat;
-    const prio=pickW(PRIO_W).p;
-    const residencia=pickW(RESID_W).r;
-    const desc=pick(DESCS[cat]||['Reclamo general.']);
-    const calles=['Av. Bunge','Av. del Mar','Av. Shaw','Los Aromos','Los Hibiscos','Calle Gaviota','Paseo del Mar','Del Libertador','Los Pinos'];
-    const dir=pick(calles)+' '+Math.floor(100+Math.random()*900);
-    out.push({nombre,apellido,email:`${nombre.toLowerCase()}.${apellido.toLowerCase()}${Math.floor(Math.random()*99)}@mail.com`,tel:'2254'+Math.floor(400000+Math.random()*599999),barrio,dir,cat,prio,residencia,desc,fecha:rdate(45)});
+// ── API ──
+async function loadData() {
+  try {
+    const resp = await fetch(API);
+    const json = await resp.json();
+    if (json.ok) {
+      submissions = json.data.map(r => ({
+        nombre: r.nombre, apellido: r.apellido, email: r.email,
+        tel: r.telefono, barrio: r.barrio, dir: r.direccion,
+        cat: r.categoria, prio: r.prioridad, residencia: r.residencia,
+        desc: r.descripcion, fecha: r.created_at ? r.created_at.split('T')[0] : ''
+      }));
+      updateHero();
+    }
+  } catch(e) {
+    console.error('Error cargando datos:', e);
   }
-  return out;
 }
 
-submissions=generateSeeds(50);
+async function saveReclamo(data) {
+  const resp = await fetch(API, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  });
+  return await resp.json();
+}
 
 // ── NAVEGACIÓN ──
-function showPage(p,el){
+function showPage(p, el) {
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  if(el)el.classList.add('active');
-  if(p==='stats')renderStats();
-  if(p==='map')renderMap();
-  if(p==='db')renderDB();
+  if(el) el.classList.add('active');
+  if(p==='stats') { loadData().then(renderStats); }
+  if(p==='map')   { loadData().then(renderMap); }
+  if(p==='db')    { loadData().then(()=>{ document.getElementById('db-loading').classList.remove('show'); document.getElementById('db-table').style.display='block'; renderDB(); }); }
   updateHero();
 }
 
-function selectCat(el){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');selectedCat=el.dataset.cat;}
-function selectPrio(el,p){document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');selectedPrio=p;}
-function setResidencia(r,el){document.querySelectorAll('#btn-res,#btn-ver,#btn-tur').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');selectedResidencia=r;}
+function selectCat(el){ document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); selectedCat=el.dataset.cat; }
+function selectPrio(el,p){ document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); selectedPrio=p; }
+function setRes(r,el){ document.querySelectorAll('#btn-res,#btn-ver,#btn-tur').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); selectedRes=r; }
 
-function submitForm(){
+async function submitForm() {
   const n=document.getElementById('f-nombre').value.trim();
   const a=document.getElementById('f-apellido').value.trim();
   const e=document.getElementById('f-email').value.trim();
   const b=document.getElementById('f-barrio').value;
   const d=document.getElementById('f-desc').value.trim();
-  if(!n||!a||!e||!b||!selectedCat||!selectedPrio||!d){alert('Por favor completá todos los campos obligatorios (*).');return;}
-  submissions.push({nombre:n,apellido:a,email:e,tel:document.getElementById('f-tel').value,barrio:b,dir:document.getElementById('f-dir').value,cat:selectedCat,prio:selectedPrio,residencia:selectedResidencia||'residente',desc:d,fecha:new Date().toISOString().split('T')[0]});
-  document.getElementById('success-banner').classList.add('show');
-  updateHero();
-  ['f-nombre','f-apellido','f-email','f-tel','f-dir','f-desc'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('f-barrio').value='';
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
-  document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('sel'));
-  selectedCat='';selectedPrio='';selectedResidencia='';
-  setTimeout(()=>document.getElementById('success-banner').classList.remove('show'),5000);
+  if(!n||!a||!e||!b||!selectedCat||!selectedPrio||!d){ alert('Completá todos los campos obligatorios (*)'); return; }
+
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true; btn.textContent='Enviando...';
+  document.getElementById('error-banner').classList.remove('show');
+
+  try {
+    const result = await saveReclamo({
+      nombre:n, apellido:a, email:e,
+      telefono:document.getElementById('f-tel').value,
+      barrio:b, direccion:document.getElementById('f-dir').value,
+      categoria:selectedCat, prioridad:selectedPrio,
+      residencia:selectedRes||'residente',
+      descripcion:d
+    });
+
+    if(result.ok) {
+      await loadData();
+      document.getElementById('success-banner').classList.add('show');
+      ['f-nombre','f-apellido','f-email','f-tel','f-dir','f-desc'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('f-barrio').value='';
+      document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
+      document.querySelectorAll('.prio-btn').forEach(b=>b.classList.remove('sel'));
+      selectedCat=''; selectedPrio=''; selectedRes='';
+      setTimeout(()=>document.getElementById('success-banner').classList.remove('show'),5000);
+    } else {
+      document.getElementById('error-banner').classList.add('show');
+    }
+  } catch(err) {
+    document.getElementById('error-banner').classList.add('show');
+  }
+
+  btn.disabled=false; btn.textContent='Enviar mi aporte a Pinamar →';
 }
 
-function updateHero(){
+function updateHero() {
   document.getElementById('hero-total').textContent=submissions.length;
   document.getElementById('hero-loc').textContent=[...new Set(submissions.map(s=>s.barrio))].length;
   document.getElementById('hero-alta').textContent=submissions.filter(s=>s.prio==='alta').length;
@@ -458,33 +439,39 @@ function updateHero(){
 }
 
 // ── ESTADÍSTICAS ──
-function renderStats(){
+function renderStats() {
+  document.getElementById('stats-loading').classList.remove('show');
+  document.getElementById('stats-content').style.display='block';
   document.getElementById('s-total').textContent=submissions.length;
   document.getElementById('s-alta').textContent=submissions.filter(s=>s.prio==='alta').length;
   document.getElementById('s-loc').textContent=[...new Set(submissions.map(s=>s.barrio))].length;
   document.getElementById('s-ideas').textContent=submissions.filter(s=>s.cat==='Idea para la ciudad').length;
+
   const cats={};submissions.forEach(s=>{cats[s.cat]=(cats[s.cat]||0)+1;});
   const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
   const maxV=sorted[0]?sorted[0][1]:1;
   const colorMap=Object.fromEntries(CATS_W.map(c=>[c.cat,c.color]));
   const iconMap=Object.fromEntries(CATS_W.map(c=>[c.cat,c.icon]));
   document.getElementById('bar-chart').innerHTML=sorted.map(([k,v])=>`<div class="bar-item"><div class="bar-label"><span>${iconMap[k]||'•'}</span><span>${k}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/maxV*100)}%;background:${colorMap[k]||'#1a5c8a'}"></div></div><div class="bar-count">${v}</div></div>`).join('');
+
   const pc={alta:0,media:0,baja:0};submissions.forEach(s=>{pc[s.prio]=(pc[s.prio]||0)+1;});
   const cv=document.getElementById('pie-canvas'),ctx=cv.getContext('2d');
   ctx.clearRect(0,0,160,160);
   const sl=[{label:'Alta',val:pc.alta,color:'#e55050'},{label:'Media',val:pc.media,color:'#f59e0b'},{label:'Baja',val:pc.baja,color:'#3b82f6'}];
-  let st=-Math.PI/2;const tt=sl.reduce((s,x)=>s+x.val,0)||1;
+  let st=-Math.PI/2; const tt=sl.reduce((s,x)=>s+x.val,0)||1;
   sl.forEach(s=>{const a=(s.val/tt)*2*Math.PI;ctx.beginPath();ctx.moveTo(80,80);ctx.arc(80,80,74,st,st+a);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();st+=a;});
   ctx.beginPath();ctx.arc(80,80,38,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
   ctx.fillStyle='#1a2332';ctx.font='bold 17px DM Sans,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tt,80,77);
   ctx.font='10px DM Sans,sans-serif';ctx.fillStyle='#5a6a7e';ctx.fillText('aportes',80,91);
   document.getElementById('pie-legend').innerHTML=sl.map(s=>`<div class="pie-item"><div class="pie-dot" style="background:${s.color}"></div><span>${s.label}: <strong>${s.val}</strong> (${Math.round(s.val/tt*100)}%)</span></div>`).join('');
+
   const grpMap={'Centro Pinamar':'Pinamar','Zona Comercial':'Pinamar','Barrio Náutico':'Pinamar','Las Gaviotas':'Pinamar','Del Bosque':'Pinamar','Pinamar':'Pinamar'};
   const bm={};submissions.forEach(s=>{const k=grpMap[s.barrio]||s.barrio;bm[k]=(bm[k]||0)+1;});
   const bs=Object.entries(bm).sort((a,b)=>b[1]-a[1]).slice(0,6);
   const bmax=bs[0]?bs[0][1]:1;
   const bc=['#1a5c8a','#2980b9','#2d6a4f','#d4a85a','#c0392b','#8e44ad'];
   document.getElementById('localidad-chart').innerHTML=bs.map(([k,v],i)=>`<div class="bar-item"><div class="bar-label" style="width:110px">${k}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/bmax*100)}%;background:${bc[i%bc.length]}"></div></div><div class="bar-count">${v}</div></div>`).join('');
+
   const rc={residente:0,veranean:0,turista:0};submissions.forEach(s=>{rc[s.residencia]=(rc[s.residencia]||0)+1;});
   if(doughnutChart)doughnutChart.destroy();
   doughnutChart=new Chart(document.getElementById('doughnut-canvas'),{type:'doughnut',data:{labels:['Residentes','Veraneantes','Turistas'],datasets:[{data:[rc.residente,rc.veranean,rc.turista],backgroundColor:['#1a5c8a','#2d6a4f','#d4a85a'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false}}}});
@@ -543,7 +530,7 @@ function renderMap(){
     const data=submissions.filter(s=>z.keys.some(k=>s.barrio.includes(k))&&(mapFilter==='all'||s.cat===mapFilter));
     const cats={};data.forEach(s=>{cats[s.cat]=(cats[s.cat]||0)+1;});
     const top1=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
-    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><strong style="font-size:13px">${z.name.replace('\n',' ')}</strong><span style="font-size:19px;font-weight:700;color:var(--accent)">${z.count}</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:5px">${z.desc}</div>${top1?`<div style="font-size:11.5px;font-weight:600;color:var(--text)">↑ ${top1[0]}: ${top1[1]}</div>`:'<div style="font-size:11px;color:var(--muted)">Sin datos</div>'}</div>`;
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><strong style="font-size:13px">${z.name.replace('\n',' ')}</strong><span style="font-size:19px;font-weight:700;color:var(--accent)">${z.count}</span></div><div style="font-size:11px;color:var(--muted);margin-bottom:5px">${z.desc}</div>${top1?`<div style="font-size:11.5px;font-weight:600;color:var(--text)">↑ ${top1[0]}: ${top1[1]}</div>`:'<div style="font-size:11px;color:var(--muted)">Sin datos aún</div>'}</div>`;
   }).join('');
 }
 
@@ -568,8 +555,8 @@ function renderDB(){
   const rl={residente:'🏠 Residente',veranean:'🌊 Veraneante',turista:'🧳 Turista'};
   const data=submissions.filter(s=>`${s.nombre} ${s.apellido} ${s.barrio} ${s.cat} ${s.desc}`.toLowerCase().includes(search)&&(!catF||s.cat===catF)&&(!prioF||s.prio===prioF));
   document.getElementById('db-tbody').innerHTML=data.length
-    ? data.map(s=>`<tr><td><strong>${s.nombre} ${s.apellido}</strong><br><span style="font-size:10px;color:var(--muted)">${s.email}</span></td><td>${s.barrio}</td><td style="font-size:11px;color:var(--muted)">${rl[s.residencia]||'—'}</td><td><span class="badge cat">${s.cat}</span></td><td><span class="badge ${s.prio}">${pl[s.prio]}</span></td><td style="max-width:210px;color:var(--muted);font-size:11px;line-height:1.5">${s.desc.substring(0,85)}${s.desc.length>85?'…':''}</td><td style="font-size:11px;white-space:nowrap">${s.fecha}</td></tr>`).join('')
-    : '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No se encontraron resultados</td></tr>';
+    ?data.map(s=>`<tr><td><strong>${s.nombre} ${s.apellido}</strong><br><span style="font-size:10px;color:var(--muted)">${s.email}</span></td><td>${s.barrio}</td><td style="font-size:11px;color:var(--muted)">${rl[s.residencia]||'—'}</td><td><span class="badge cat">${s.cat}</span></td><td><span class="badge ${s.prio}">${pl[s.prio]}</span></td><td style="max-width:210px;color:var(--muted);font-size:11px;line-height:1.5">${s.desc.substring(0,85)}${s.desc.length>85?'…':''}</td><td style="font-size:11px;white-space:nowrap">${s.fecha}</td></tr>`).join('')
+    :'<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No se encontraron resultados</td></tr>';
 }
 
 function exportCSV(){
@@ -584,7 +571,7 @@ async function generateProposal(){
   const btn=document.getElementById('gen-btn'),out=document.getElementById('proposal-out');
   btn.classList.add('loading');btn.disabled=true;
   out.classList.add('show');
-  out.innerHTML='<div style="color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px">Analizando '+submissions.length+' reclamos del partido <div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  out.innerHTML='<div style="color:var(--muted);font-size:13px;display:flex;align-items:center;gap:8px">Analizando '+submissions.length+' reclamos <div class="typing-dots"><span></span><span></span><span></span></div></div>';
   const zona=document.getElementById('ai-zona').value||'todo el partido de Pinamar';
   const perfil=document.getElementById('ai-perfil').value;
   const tipo=document.getElementById('ai-tipo').value;
@@ -595,20 +582,20 @@ async function generateProposal(){
   const tur=submissions.filter(s=>s.residencia==='turista').length;
   const ver=submissions.filter(s=>s.residencia==='veranean').length;
   const topIdeas=submissions.filter(s=>s.cat==='Idea para la ciudad').map(s=>s.desc).slice(0,4).join(' | ');
-  const prompt=`Sos asesor de gestión municipal para el Partido de Pinamar, provincia de Buenos Aires, Argentina. Ciudad costera turística con 4 localidades: Pinamar, Ostende, Valeria del Mar y Cariló.\n\nDATOS de ${submissions.length} reclamos ciudadanos:\n- Alta urgencia: ${alta} reclamos\n- Perfil: ${res} residentes, ${ver} veraneantes, ${tur} turistas\n- Problemáticas (frecuencia): ${topCats.map(([k,v])=>`${k}(${v})`).join(', ')}\n- Ideas ciudadanas: ${topIdeas}\n- Zona: ${zona} | Perfil: ${perfil}\n\nGenerá: ${tipo}\n\nIncluí:\n1. DIAGNÓSTICO TERRITORIAL\n2. PRIORIDADES DE ACCIÓN (5 medidas concretas numeradas)\n3. EQUILIBRIO RESIDENTE-TURISTA (2 puntos)\n4. INDICADORES DE ÉXITO (3 métricas)\n5. CRONOGRAMA\n\nSé específico para Pinamar. En español.`;
+  const prompt=`Sos asesor de gestión municipal para el Partido de Pinamar, Buenos Aires, Argentina. Ciudad costera turística con 4 localidades: Pinamar, Ostende, Valeria del Mar y Cariló.\n\nDATOS de ${submissions.length} reclamos ciudadanos:\n- Alta urgencia: ${alta}\n- Perfil: ${res} residentes, ${ver} veraneantes, ${tur} turistas\n- Problemáticas: ${topCats.map(([k,v])=>`${k}(${v})`).join(', ')}\n- Ideas: ${topIdeas||'ninguna aún'}\n- Zona: ${zona} | Perfil: ${perfil}\n\nGenerá: ${tipo}\n\n1. DIAGNÓSTICO TERRITORIAL\n2. PRIORIDADES DE ACCIÓN (5 medidas numeradas)\n3. EQUILIBRIO RESIDENTE-TURISTA (2 puntos)\n4. INDICADORES DE ÉXITO (3 métricas)\n5. CRONOGRAMA\n\nEn español, específico para Pinamar.`;
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
     const d=await resp.json();
-    renderProposal(d.content?.[0]?.text||'No se pudo generar la propuesta.',zona,tipo);
-  }catch(err){
-    renderProposal(`**DIAGNÓSTICO TERRITORIAL:** El Partido de Pinamar registra ${submissions.length} aportes ciudadanos con ${alta} de alta urgencia. Las principales problemáticas son ${topCats.slice(0,3).map(([k])=>k).join(', ')}, con mayor concentración en el área central y Ostende.\n\n**PRIORIDADES DE ACCIÓN:**\n1. Plan de bacheo de emergencia en Av. Bunge y acceso costero (60 días)\n2. Refuerzo del sistema de recolección: doble turno domingos en enero-febrero\n3. Reparación de accesos y sanitarios de balnearios antes de la temporada\n4. Convenio urgente con ABSA para reparación de pérdidas de agua\n5. Plan de iluminación LED en sectores sin cobertura\n\n**EQUILIBRIO RESIDENTE-TURISTA:**\n- Canal express de reclamos para turistas con respuesta en 24hs en temporada\n- Comité mixto residentes-comerciantes para monitorear impacto estacional\n\n**INDICADORES DE ÉXITO:**\n- Reducción 40% en reclamos de infraestructura en 60 días\n- Satisfacción turista ≥ 75% en encuesta de fin de temporada\n- Tiempo de respuesta urgentes < 48hs\n\n**CRONOGRAMA:** Semanas 1-2: bacheo y residuos. Semanas 3-6: agua, iluminación y balnearios. Mes 3: evaluación con nueva encuesta ciudadana.`,zona,tipo);
+    renderProposal(d.content?.[0]?.text||'Error al generar.',zona,tipo);
+  }catch(e){
+    renderProposal(`**DIAGNÓSTICO TERRITORIAL:** El Partido de Pinamar registra ${submissions.length} aportes con ${alta} de alta urgencia. Principales problemáticas: ${topCats.slice(0,3).map(([k])=>k).join(', ')}.\n\n**PRIORIDADES DE ACCIÓN:**\n1. Plan de bacheo en Av. Bunge y accesos costeros (60 días)\n2. Refuerzo recolección residuos domingos en temporada\n3. Reparación accesos y sanitarios de balnearios\n4. Convenio con ABSA para pérdidas de agua\n5. Plan de iluminación LED en sectores sin cobertura\n\n**EQUILIBRIO RESIDENTE-TURISTA:**\n- Canal express de reclamos para turistas con respuesta en 24hs\n- Comité mixto residentes-comerciantes de monitoreo estacional\n\n**INDICADORES DE ÉXITO:**\n- Reducción 40% reclamos de infraestructura en 60 días\n- Satisfacción turista ≥ 75% en encuesta de fin de temporada\n- Respuesta urgentes < 48hs\n\n**CRONOGRAMA:** Semanas 1-2: bacheo y residuos. Semanas 3-6: agua e iluminación. Mes 3: evaluación.`,zona,tipo);
   }
   btn.classList.remove('loading');btn.disabled=false;
 }
 
 function renderProposal(text,zona,tipo){
   const out=document.getElementById('proposal-out');
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><strong style="font-size:14px">${tipo} — Partido de Pinamar</strong><br><span style="font-size:11px;color:var(--muted)">${zona} · ${new Date().toLocaleDateString('es-AR')} · Basado en ${submissions.length} aportes</span></div><button onclick="window.print()" style="padding:6px 12px;border:1px solid var(--border);border-radius:7px;background:#fff;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif">🖨 Imprimir</button></div>`;
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><strong style="font-size:14px">${tipo} — Partido de Pinamar</strong><br><span style="font-size:11px;color:var(--muted)">${zona} · ${new Date().toLocaleDateString('es-AR')} · ${submissions.length} aportes</span></div><button onclick="window.print()" style="padding:6px 12px;border:1px solid var(--border);border-radius:7px;background:#fff;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif">🖨 Imprimir</button></div>`;
   let inList=false;
   text.split('\n').filter(l=>l.trim()).forEach(line=>{
     line=line.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
@@ -629,8 +616,7 @@ function renderProposal(text,zona,tipo){
 }
 
 // ── INIT ──
-updateHero();
-renderDB();
+loadData().then(updateHero);
 </script>
 </body>
 </html>
